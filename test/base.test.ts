@@ -1,8 +1,8 @@
 import { AxiosRequestConfig } from 'axios'
 
-const { BaseApi } = require('../src/base/base')
-const { getUrlFromConfig } = require('../src/base/base.utils')
-const { ApiKeyNotFound, RateLimitError, ServiceUnavailable } = require('../src/errors')
+import { BaseApi } from '../src/base/base'
+import { getUrlFromConfig } from '../src/base/base.utils'
+import { ApiKeyNotFound, RateLimitError, ServiceUnavailable } from '../src/errors'
 
 describe('Base api', () => {
   const riot = new BaseApi({ key: '' })

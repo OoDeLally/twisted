@@ -34,7 +34,7 @@ export class BaseApi<Region extends string> {
    */
   constructor (key: string)
   constructor (param?: string | IBaseApiParams) {
-    this.key = ''
+    this.key = process.env.RIOT_API_KEY || ''
     if (typeof param === 'string') {
       this.key = param
     } else if (param) {
