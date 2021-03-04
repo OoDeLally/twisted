@@ -93,7 +93,7 @@ describe('Base api', () => {
         params: { queue: [420, 430], beginIndex: 0, endIndex: 10 }
       }
       const url = getUrlFromConfig(config)
-      const exp = `${baseUrl}?queue=420&queue=430&beginIndex=0&endIndex=10`
+      const exp = `${baseUrl}?beginIndex=0&endIndex=10&queue=420&queue=430`
       expect(url).toEqual(exp)
     })
   })

@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from 'axios'
-import qs from 'querystring'
+import qs from 'query-string'
 
 export interface IParams {
   [key: string]: string | number
