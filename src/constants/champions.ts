@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { invert } from 'lodash'
 // Untyped modules
-const { CamelCase } = require('camelcasejs')
+import CamelCase from 'camelcase'
 
 /**
  * Champions - Used as fallback
