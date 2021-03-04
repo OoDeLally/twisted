@@ -1,4 +1,3 @@
-import rp from 'request-promise'
 import * as _ from 'lodash'
 import { ApiKeyNotFound } from '../errors'
 import { IEndpoint } from '../endpoints'
@@ -13,6 +12,7 @@ import { ServiceUnavailable } from '../errors/service-unavailable.error'
 import { BaseConstants, BaseApiGames } from './base.const'
 import { Logger } from './logger.base'
 import { RequestBase } from './request.base'
+import { AxiosRequestConfig } from 'axios'
 
 config()
 
@@ -142,8 +142,8 @@ export class BaseApi<Region extends string> {
     return new GenericError(headers, e)
   }
 
-  private internalRequest<T> (options: rp.OptionsWithUri): Promise<T> {
-    return RequestBase.request<T>(options)
+  private internalRequest<T> (config: AxiosRequestConfig): Promise<T> {
+    return RequestBase.request<T>(config)
   }
 
   private async retryRateLimit<T> (region: Region, endpoint: IEndpoint, params?: IParams, e?: any): Promise<ApiResponseDTO<T>> {
@@ -196,7 +196,7 @@ export class BaseApi<Region extends string> {
     }
   }
 
-  protected async request<T> (region: Region, endpoint: IEndpoint, params?: IParams, forceError?: boolean, qs?: any): Promise<ApiResponseDTO<T>> {
+  protected async request<T> (region: Region, endpoint: IEndpoint, params?: IParams, forceError?: boolean, queryParams?: any): Promise<ApiResponseDTO<T>> {
     if (!this.key) {
       throw new ApiKeyNotFound()
     }
@@ -204,28 +204,25 @@ export class BaseApi<Region extends string> {
     params = params || {}
     params.region = region.toLowerCase()
     // Format
-    const uri = this.getApiUrl(endpoint, params)
+    const url = this.getApiUrl(endpoint, params)
     // Logger
     if (this.debug.logTime) {
-      Logger.start(endpoint, uri)
+      Logger.start(endpoint, url)
     }
-    const options: rp.OptionsWithUri = {
-      uri,
+    const config: AxiosRequestConfig = {
+      url,
       method: 'GET',
       headers: {
         Origin: null,
         'X-Riot-Token': this.key
       },
-      qs,
-      useQuerystring: true,
-      resolveWithFullResponse: true,
-      json: true
+      params: queryParams,
     }
     if (this.debug.logUrls) {
-      Logger.uri(options, endpoint)
+      Logger.uri(config, endpoint)
     }
     try {
-      const apiResponse = await this.internalRequest<any>(options)
+      const apiResponse = await this.internalRequest<any>(config)
       const { body, headers } = apiResponse
       return {
         rateLimits: this.getRateLimits(headers),
@@ -238,7 +235,7 @@ export class BaseApi<Region extends string> {
       return await this.retryRateLimit<T>(region, endpoint, params, e)
     } finally {
       if (this.debug.logTime) {
-        Logger.end(endpoint, uri)
+        Logger.end(endpoint, url)
       }
     }
   }

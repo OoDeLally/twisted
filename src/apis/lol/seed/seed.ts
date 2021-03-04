@@ -1,4 +1,4 @@
-import rp from 'request-promise'
+import axios from 'axios'
 import { DataSeed } from '../../../constants/dataSeed'
 import { MatchDto } from '../../../models-dto/matches/match/match.dto'
 
@@ -6,13 +6,7 @@ export class SeedApi {
   private readonly baseUrl = DataSeed.BASE
 
   private async request<T> (path: string): Promise<T> {
-    const uri = `${this.baseUrl}/${path}`
-    const options: rp.OptionsWithUri = {
-      uri,
-      method: 'GET',
-      json: true
-    }
-    return rp(options)
+    return (await axios.get<T>( `${this.baseUrl}/${path}`)).data
   }
 
   async matches (id: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10): Promise<{ matches: MatchDto[] }> {

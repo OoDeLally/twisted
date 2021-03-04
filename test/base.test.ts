@@ -1,5 +1,7 @@
+import { AxiosRequestConfig } from 'axios'
+
 const { BaseApi } = require('../src/base/base')
-const { getUrlFromOptions } = require('../src/base/base.utils')
+const { getUrlFromConfig } = require('../src/base/base.utils')
 const { ApiKeyNotFound, RateLimitError, ServiceUnavailable } = require('../src/errors')
 
 describe('Base api', () => {
@@ -86,11 +88,11 @@ describe('Base api', () => {
 
     it('should return correct url with query params', () => {
       const baseUrl = 'https://na.api.riotgames.com/lol/match/v4/matchlists/by-account/xxx'
-      const options = {
-        uri: baseUrl,
-        qs: { queue: [420, 430], beginIndex: 0, endIndex: 10 }
+      const config: AxiosRequestConfig = {
+        url: baseUrl,
+        params: { queue: [420, 430], beginIndex: 0, endIndex: 10 }
       }
-      const url = getUrlFromOptions(options)
+      const url = getUrlFromConfig(config)
       const exp = `${baseUrl}?queue=420&queue=430&beginIndex=0&endIndex=10`
       expect(url).toEqual(exp)
     })
