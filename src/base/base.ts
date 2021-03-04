@@ -2,7 +2,6 @@ import * as _ from 'lodash'
 import { ApiKeyNotFound } from '../errors'
 import { IEndpoint } from '../endpoints'
 import { TOO_MANY_REQUESTS, SERVICE_UNAVAILABLE } from 'http-status-codes'
-import { config } from 'dotenv'
 import { ApiResponseDTO } from '../models-dto/api-response/api-response'
 import { RateLimitDto } from '../models-dto/rate-limit/rate-limit.dto'
 import { GenericError } from '../errors/Generic.error'
@@ -13,8 +12,6 @@ import { BaseConstants, BaseApiGames } from './base.const'
 import { Logger } from './logger.base'
 import { RequestBase } from './request.base'
 import { AxiosRequestConfig } from 'axios'
-
-config()
 
 export class BaseApi<Region extends string> {
   protected readonly game: BaseApiGames = BaseApiGames.LOL
@@ -37,7 +34,7 @@ export class BaseApi<Region extends string> {
    */
   constructor (key: string)
   constructor (param?: string | IBaseApiParams) {
-    this.key = process.env.RIOT_API_KEY || ''
+    this.key = ''
     if (typeof param === 'string') {
       this.key = param
     } else if (param) {
