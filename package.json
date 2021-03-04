@@ -1,6 +1,6 @@
 {
   "name": "twisted-axios",
-  "version": "1.35.0",
+  "version": "1.36.0",
   "description": "Fetching riot games api data",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
